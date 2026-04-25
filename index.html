@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f28c28">
+  <title>STT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Nitq Alətləri</p>
+        <h1>STT</h1>
+        <p class="hero-text">
+          Telefon və kompüterdə səsdən mətnə, mətndən səsə və audio fayllarla işləmək üçün brauzer tətbiqi.
+        </p>
+      </div>
+      <div class="hero-card">
+        <p class="hero-card-title">Sürətli əmrlər</p>
+        <div class="hero-actions">
+          <button id="listenButton" class="action-button primary">Dinləməni Başlat</button>
+          <button id="speakButton" class="action-button secondary">Mətni Oxu</button>
+        </div>
+        <p id="statusMessage" class="status-pill">STT hazırdır.</p>
+        <p class="hero-note">Səsləndirmə AI səsi ilə yaradıla bilər.</p>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-label">Səsdən Mətnə</p>
+            <h2>Dinlə və yazıya çevir</h2>
+          </div>
+          <span class="support-chip" id="sttSupportChip">Brauzer dəstəyi yoxlanılır...</span>
+        </div>
+
+        <label class="field-label" for="languageSelect">Tanıma dili</label>
+        <select id="languageSelect" class="control">
+          <option value="az-AZ" selected>Azərbaycan dili</option>
+          <option value="tr-TR">Türk dili</option>
+          <option value="en-US">İngilis dili (ABŞ)</option>
+          <option value="en-GB">İngilis dili (UK)</option>
+          <option value="ru-RU">Rus dili</option>
+        </select>
+
+        <label class="field-label" for="transcriptOutput">Mətn nəticəsi</label>
+        <textarea id="transcriptOutput" class="editor" placeholder="Danışıq burada görünəcək..."></textarea>
+
+        <div class="button-row">
+          <button id="stopListenButton" class="action-button tertiary" disabled>Dinləməni Dayandır</button>
+          <button id="copyTranscriptButton" class="action-button tertiary">Kopyala</button>
+          <button id="clearTranscriptButton" class="action-button tertiary">Təmizlə</button>
+          <button id="useTranscriptForSpeechButton" class="action-button tertiary">TTS Bölməsinə Keçir</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-label">Mətndən Səsə</p>
+            <h2>Mətni yaz və səsləndir</h2>
+          </div>
+          <span class="support-chip" id="ttsSupportChip">Brauzer dəstəyi yoxlanılır...</span>
+        </div>
+
+        <label class="field-label" for="ttsInput">Oxunacaq mətn</label>
+        <textarea id="ttsInput" class="editor" placeholder="Səsləndirilməsini istədiyin mətni yaz..."></textarea>
+
+        <div class="control-grid">
+          <div>
+            <label class="field-label" for="voiceSelect">Səs</label>
+            <select id="voiceSelect" class="control"></select>
+          </div>
+          <div>
+            <label class="field-label" for="rateRange">Sürət <span id="rateValue">1.0x</span></label>
+            <input id="rateRange" class="slider" type="range" min="0.7" max="1.3" value="1" step="0.1">
+          </div>
+          <div>
+            <label class="field-label" for="pitchRange">Ton <span id="pitchValue">1.0x</span></label>
+            <input id="pitchRange" class="slider" type="range" min="0.8" max="1.4" value="1" step="0.1">
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button id="pauseButton" class="action-button tertiary">Pauza</button>
+          <button id="resumeButton" class="action-button tertiary">Davam Et</button>
+          <button id="stopSpeakButton" class="action-button tertiary">Dayandır</button>
+          <button id="saveTextButton" class="action-button tertiary">Mətni Yadda Saxla</button>
+        </div>
+        <p class="panel-help">Azərbaycan dili üçün bu bölmə əvvəl OpenAI TTS-i yoxlayır, alınmasa brauzer səsinə düşür.</p>
+      </section>
+
+      <section class="panel panel-wide">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-label">Audio Fayl</p>
+            <h2>Audio yüklə və mətnə çevirməyə hazırla</h2>
+          </div>
+          <span class="support-chip">Audio bölməsi hazırdır</span>
+        </div>
+
+        <label class="field-label" for="audioUpload">Audio faylı seç</label>
+        <input id="audioUpload" class="control file-input" type="file" accept="audio/*">
+
+        <div class="audio-card">
+          <p id="audioFileInfo" class="audio-file-info">Hələ audio seçilməyib.</p>
+          <audio id="audioPlayer" class="audio-player" controls></audio>
+        </div>
+
+        <label class="field-label" for="audioTranscriptOutput">Audio fayl mətn nəticəsi</label>
+        <textarea id="audioTranscriptOutput" class="editor audio-editor" placeholder="Audio fayldan alınan mətn burada görünəcək..." readonly></textarea>
+
+        <div class="button-row button-row-two">
+          <button id="removeAudioButton" class="action-button tertiary">Audionu Sil</button>
+          <button id="transcribeAudioButton" class="action-button tertiary">Audionu Mətnə Çevir</button>
+        </div>
+        <p class="panel-help">Bu düymə OpenAI transkripsiya endpoint-i ilə işləyir. Hostda `OPENAI_API_KEY` qurulmalıdır.</p>
+      </section>
+    </main>
+
+    <footer class="footer-note">
+      Ən yaxşı nəticə üçün kompüterdə və Android-də Chrome və ya Edge istifadə edin. iPhone-da bəzi brauzerlər TTS-i STT-dən daha yaxşı dəstəkləyə bilər.
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
